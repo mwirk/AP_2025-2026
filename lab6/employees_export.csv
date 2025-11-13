@@ -1,0 +1,6 @@
+Name,Surname,Mail,Corporation,Position,Salary,Status
+Jan,Kowalski,jan.kowalski@techcorp.com,TechCorp,CEO,12500.0,ACTIVE
+Anna,Nowak,anna.nowak@techcorp.com,TechCorp,Programmer,8500.0,ACTIVE
+Tomasz,Pracownik,tomasz@gmail.com,wodociągi,Intern,3000.0,ACTIVE
+Ryszard,Pracownik,ryszard@gmail.com,wodociągi,Intern,2000.0,ACTIVE
+Ryszard,Pracownik,ryszardd@gmail.com,wodociągi,Intern,2000.0,ACTIVE
