@@ -1,0 +1,35 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista działów</title>
+</head>
+<body>
+<div layout:fragment="content" style="max-width: 800px; margin: 2em auto;">
+    <h2>Lista działów</h2>
+
+    <a href="/departments/add" style="display: inline-block; margin-bottom: 1em;">+ Dodaj dział</a>
+
+    <table border="1" cellpadding="8" cellspacing="0" style="width: 100%;">
+        <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Lokalizacja</th>
+            <th>Budżet</th>
+            <th>E-mail menedżera</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="dep : ${departments}">
+            <td th:text="${dep.name}"></td>
+            <td th:text="${dep.location}"></td>
+            <td th:text="${dep.budget}"></td>
+            <td th:text="${dep.managerMail}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dodaj pracownika</title>
+</head>
+<body>
+<div layout:fragment="content" style="max-width: 600px; margin: 2em auto;">
+    <h2>Dodaj nowego pracownika</h2>
+
+    <!-- Komunikaty -->
+    <div th:if="${error}" style="color: red; margin-bottom: 1em;" th:text="${error}"></div>
+    <div th:if="${success}" style="color: green; margin-bottom: 1em;" th:text="${success}"></div>
+
+
+    <form th:action="@{/employees/add}" method="post" style="display: flex; flex-direction: column; gap: 1em;">
+
+        <label>
+            Imię:
+            <input type="text" name="name" placeholder="Jan" required>
+        </label>
+
+        <label>
+            Nazwisko:
+            <input type="text" name="surname" placeholder="Kowalski" required>
+        </label>
+
+        <label>
+            E-mail:
+            <input type="email" name="mail" placeholder="jan.kowalski@example.com" required>
+        </label>
+
+        <label>
+            Firma:
+            <input type="text" name="corporation" placeholder="Nazwa firmy" required>
+        </label>
+
+        <label>
+            Stanowisko:
+            <select name="position" required>
+                <option value="">-- wybierz --</option>
+                <option th:each="pos : ${T(com.techcorp.employee.model.Position).values()}"
+                        th:value="${pos}" th:text="${pos}"></option>
+            </select>
+        </label>
+
+        <label>
+            Wynagrodzenie:
+            <input type="number" step="0.01" name="salary" placeholder="5000.00" required>
+        </label>
+
+        <label>
+            Status:
+            <select name="status" required>
+                <option value="">-- wybierz --</option>
+                <option th:each="stat : ${T(com.techcorp.employee.model.Status).values()}"
+                        th:value="${stat}" th:text="${stat}"></option>
+            </select>
+        </label>
+
+        <label>
+            Zdjęcie:
+            <input type="text" name="photo" placeholder="https://example.com/photo.jpg">
+        </label>
+
+        <button type="submit" style="padding: 0.5em 1em; background-color: lightblue; border: none; cursor: pointer;">
+            Dodaj pracownika
+        </button>
+    </form>
+</div>
+</body>
+</html>

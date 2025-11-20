@@ -1,0 +1,40 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Employees</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="employees-grid" style="display:flex; gap:2em;"
+         th:unless="${#lists.isEmpty(employees)}">
+
+        <div class="employee-card" th:each="employee : ${employees}">
+            <img th:if="${employee.hasPhoto}"
+                 th:src="${employee.photo}"
+                 alt="brak zdjecia"
+                 class="employee-cover">
+
+            <div th:unless="${employee.hasPhoto}"
+                 class="employee-cover"
+                 style="display:flex; align-items:center; justify-content:center; color:#999;">
+                Brak zdjęcia
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:1em; border:2px solid black">
+                <div class="employee-title" th:text="${employee.name}"></div>
+                <div class="employee-author" th:text="${employee.surname}"></div>
+                <div class="employee-mail" th:text="${employee.mail}"></div>
+                <div class="employee-corporation" th:text="${employee.corporation}"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
