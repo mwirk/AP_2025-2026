@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Upload pliku</title>
+</head>
+<body>
+<div layout:fragment="content" style="max-width: 600px; margin: 2em auto;">
+    <h2>Prześlij plik CSV lub XML</h2>
+
+    <!-- Komunikaty -->
+    <div th:if="${error}" style="color: red;" th:text="${error}"></div>
+    <div th:if="${success}" style="color: green;" th:text="${success}"></div>
+
+    <form action="/employees/import" method="post" enctype="multipart/form-data"
+
+    style="display: flex; flex-direction: column; gap: 1em;">
+
+        <!-- Wybór pliku -->
+        <label>
+            Wybierz plik:
+            <input type="file" name="file" accept=".csv,.xml" required>
+        </label>
+
+        <!-- Wybór typu pliku – radio buttons -->
+        <div>
+            <p>Wybierz typ pliku:</p>
+            <label>
+                <input type="radio" name="fileType" value="CSV" checked>
+                CSV
+            </label>
+            <label>
+                <input type="radio" name="fileType" value="XML">
+                XML
+            </label>
+        </div>
+
+
+
+        <button type="submit" style="padding: 0.5em 1em; background-color: lightblue; border: none; cursor: pointer;">
+            Prześlij plik
+        </button>
+    </form>
+</div>
+</body>
+</html>
