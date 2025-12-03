@@ -1,11 +1,15 @@
 package com.techcorp.employee.controller;
 
 import com.opencsv.exceptions.CsvException;
-import com.techcorp.employee.dao.JdbcEmployeeDao;
+
 import com.techcorp.employee.dto.EmployeeViewDTO;
 import com.techcorp.employee.model.*;
+import com.techcorp.employee.repository.EmployeeRepository;
 import com.techcorp.employee.service.FileStorageService;
 import com.techcorp.employee.service.ImportService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,40 +24,47 @@ import java.util.List;
 @RequestMapping("/employees")
 public class EmployeeViewController {
 
-    private final JdbcEmployeeDao employeeDAO;
+    private final EmployeeRepository employeeRepository;
     private final FileStorageService fileStorageService;
     private final ImportService importService;
 
-    public EmployeeViewController(JdbcEmployeeDao employeeDAO,
+    public EmployeeViewController(EmployeeRepository employeeRepository,
                                   FileStorageService fileStorageService,
                                   ImportService importService) {
-        this.employeeDAO = employeeDAO;
+        this.employeeRepository = employeeRepository;
         this.fileStorageService = fileStorageService;
         this.importService = importService;
     }
 
 
     @GetMapping
-    public String listEmployees(Model model) {
+    public String listEmployees(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            Model model) {
 
-        List<Employee> employees = employeeDAO.findAll();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Employee> employeePage = employeeRepository.findAll(pageable);
 
-        List<EmployeeViewDTO> employeeViewDTOS = new ArrayList<>();
-        for (Employee employee : employees) {
-            EmployeeViewDTO dto = new EmployeeViewDTO(
-                    employee.getName(),
-                    employee.getSurname(),
-                    employee.getMail(),
-                    employee.getCorporation(),
-                    employee.getPhoto() != null,
-                    employee.getPhoto()
-            );
-            employeeViewDTOS.add(dto);
-        }
+        List<EmployeeViewDTO> employeeViewDTOS = employeePage.stream()
+                .map(employee -> new EmployeeViewDTO(
+                        employee.getName(),
+                        employee.getSurname(),
+                        employee.getMail(),
+                        employee.getCorporation(),
+                        employee.getPhoto() != null,
+                        employee.getPhoto()
+                ))
+                .toList();
 
         model.addAttribute("employees", employeeViewDTOS);
+        model.addAttribute("currentPage", employeePage.getNumber());
+        model.addAttribute("totalPages", employeePage.getTotalPages());
+        model.addAttribute("totalElements", employeePage.getTotalElements());
+
         return "employees/list";
     }
+
 
 
     @GetMapping("/add")
@@ -92,7 +103,7 @@ public class EmployeeViewController {
                 photo
         );
 
-        employeeDAO.save(employee);
+        employeeRepository.save(employee);
 
         redirectAttributes.addFlashAttribute(
                 "success",
@@ -116,7 +127,7 @@ public class EmployeeViewController {
 
         String pathFile = fileStorageService.storeFile(file);
 
-        // ImportService używa DAO.deleteAll() i DAO.save()
+
         ImportSummary importSummary = importService.importFromCsv(pathFile);
 
         model.addAttribute("import", importSummary);

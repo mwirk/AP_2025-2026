@@ -1,8 +1,9 @@
 package com.techcorp.employee.loader;
 
 
-import com.techcorp.employee.dao.JdbcEmployeeDao;
+
 import com.techcorp.employee.model.Employee;
+import com.techcorp.employee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -14,20 +15,20 @@ import java.util.List;
 public class XmlEmployeeLoader {
 
     private final List<Employee> xmlEmployees;
-    private final JdbcEmployeeDao employeeDAO;
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
     public XmlEmployeeLoader(@Qualifier("xmlEmployees") List<Employee> xmlEmployees,
-                             JdbcEmployeeDao employeeDAO) {
+                             EmployeeRepository employeeRepository) {
         this.xmlEmployees = xmlEmployees;
-        this.employeeDAO = employeeDAO;
+        this.employeeRepository = employeeRepository;
     }
 
     @PostConstruct
     public void loadEmployees() {
 
-        employeeDAO.deleteAll();
-        xmlEmployees.forEach(employeeDAO::save);
+        employeeRepository.deleteAll();
+        xmlEmployees.forEach(employeeRepository::save);
 
         System.out.println("Loaded " + xmlEmployees.size() + " employees.");
     }

@@ -1,9 +1,9 @@
 package com.techcorp.employee.service;
 
 import com.opencsv.exceptions.CsvException;
-import com.techcorp.employee.dao.JdbcEmployeeDao;
 import com.techcorp.employee.exception.InvalidDataException;
 import com.techcorp.employee.model.*;
+import com.techcorp.employee.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,16 +14,16 @@ import java.util.Arrays;
 
 @Service
 public class ImportService {
-    private final JdbcEmployeeDao employeeDao;
+    private final EmployeeRepository employeeRepository;
 
     private final EmployeeService employeeService;
     private final FileStorageService fileStorageService;
 
 
-    public ImportService(JdbcEmployeeDao employeeDao, EmployeeService employeeService, FileStorageService fileStorageService) {
+    public ImportService(EmployeeRepository employeeRepository, EmployeeService employeeService, FileStorageService fileStorageService) {
         this.employeeService = employeeService;
         this.fileStorageService = fileStorageService;
-        this.employeeDao = employeeDao;
+        this.employeeRepository = employeeRepository;
     }
 
 
@@ -33,7 +33,7 @@ public class ImportService {
         ImportSummary importSummary = new ImportSummary();
 
 
-        employeeDao.deleteAll();
+        employeeRepository.deleteAll();
 
         Path filePath = fileStorageService.loadFile(resourcePath);
 
@@ -50,7 +50,7 @@ public class ImportService {
                 try {
                     Employee employee = parseEmployee(line);
 
-                    employeeDao.save(employee);
+                    employeeRepository.save(employee);
                     importSummary.addNewImported();
 
                 } catch (Exception ex) {

@@ -1,8 +1,9 @@
 package com.techcorp.employee.config;
 
 import com.google.gson.Gson;
-import com.techcorp.employee.dao.JdbcEmployeeDao;
+
 import com.techcorp.employee.model.ImportSummary;
+import com.techcorp.employee.repository.EmployeeRepository;
 import com.techcorp.employee.service.EmployeeService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,14 +24,10 @@ public class AppConfig {
         return HttpClient.newHttpClient();
     }
 
-    @Bean
-    public JdbcEmployeeDao jdbcEmployeeDao(JdbcTemplate jdbcTemplate) {
-        return new JdbcEmployeeDao(jdbcTemplate);
-    }
 
     @Bean
-    public EmployeeService employeeService(JdbcEmployeeDao jdbcEmployeeDao) {
-        return new EmployeeService(jdbcEmployeeDao);
+    public EmployeeService employeeService(EmployeeRepository employeeRepository) {
+        return new EmployeeService(employeeRepository);
     }
 
     @Bean

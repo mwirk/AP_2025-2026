@@ -1,18 +1,34 @@
 package com.techcorp.employee.model;
 
+import jakarta.persistence.*;
 
-
+@Entity
+@Table(name = "employees")
 public class Employee {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String surname;
+
+    @Column(unique = true, nullable = false)
     private String mail;
+
     private String corporation;
+
+    @Enumerated(EnumType.STRING)
     private Position position;
+
     private float salary;
+
+    @Enumerated(EnumType.STRING)
     private Status status;
+
     private String photo;
+
+    protected Employee() {}
 
     public Employee(Long id, String name, String surname, String mail,
                     String corporation, Position position, Float salary,
@@ -29,7 +45,6 @@ public class Employee {
         this.photo = photo;
     }
 
-
     public Employee(String name, String surname, String mail,
                     String corporation, Position position, Float salary,
                     Status status, String photo) {
@@ -43,75 +58,63 @@ public class Employee {
 
     public void setId(Long id) { this.id = id; }
 
+    public String getName() { return name; }
 
+    public void setName(String name) { this.name = name; }
 
-    public String getName(){
-        return this.name;
-    }
-    public String getSurname(){
-        return this.surname;
-    }
-    public String getMail(){
-        return this.mail;
-    }
-    public String getCorporation(){
-        return this.corporation;
-    }
-    public Position getPosition(){
-        return this.position;
-    }
-    public float getSalary() {return salary;}
+    public String getSurname() { return surname; }
 
-    public String getPhoto() {
-        return photo;
-    }
+    public void setSurname(String surname) { this.surname = surname; }
 
-    public void setCorporation(String corporation){
-        this.corporation = corporation;
-    }
-    public void setName(String newName){
-        this.name = name;
-    }
-    public void setSurname(String newSurname) {this.surname = newSurname;}
-    public void setPosition(Position position){this.position = position;}
-    public void setSalary(Float salary){this.salary = salary;}
-    public void setPhoto(String photo){this.photo = photo;}
+    public String getMail() { return mail; }
+
+    public void setMail(String mail) { this.mail = mail; }
+
+    public String getCorporation() { return corporation; }
+
+    public void setCorporation(String corporation) { this.corporation = corporation; }
+
+    public Position getPosition() { return position; }
+
+    public void setPosition(Position position) { this.position = position; }
+
+    public float getSalary() { return salary; }
+
+    public void setSalary(Float salary) { this.salary = salary; }
+
+    public String getPhoto() { return photo; }
+
+    public void setPhoto(String photo) { this.photo = photo; }
+
+    public Status getStatus() { return status; }
+
+    public void setStatus(Status status) { this.status = status; }
 
 
     @Override
-    public int hashCode(){
-        return (this.getSurname() + this.getName() + this.getMail()).hashCode();
+    public int hashCode() {
+        return mail != null ? mail.hashCode() : 0;
     }
+
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (!(obj instanceof Employee))
-            return false;
-        Employee otheremployee = (Employee)obj;
-        return otheremployee.getMail() == this.getMail() || otheremployee.getName() == this.getName()
-                || otheremployee.getSurname() == this.getSurname();
+        if (this == obj) return true;
+        if (!(obj instanceof Employee)) return false;
 
-
+        Employee other = (Employee) obj;
+        return mail != null && mail.equals(other.mail);
     }
+
 
     @Override
     public String toString() {
-        return "Name: " + this.getName() +
-                ", Surname: " + this.getSurname() +
-                ", Mail: " + this.getMail() +
-                ", com.techcorp.employee.model.Corporation: " + this.getCorporation();
+        return "Name: " + name +
+                ", Surname: " + surname +
+                ", Mail: " + mail +
+                ", Corporation: " + corporation;
     }
 
-    public boolean equalsMail(Employee employee){
-        return employee.getMail() == this.getMail();
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-    public void setStatus(Status status){
-        this.status = status;
+    public boolean equalsMail(Employee employee) {
+        return employee != null && mail.equals(employee.getMail());
     }
 }
